@@ -16,9 +16,8 @@ from babel.core import *
 from django.conf import settings
 settings.configure(USE_I18N=True)
 from django.template import Lexer, TOKEN_TEXT, TOKEN_VAR, TOKEN_BLOCK
-from django.utils.translation.trans_real import inline_re, block_re, \
-                                                endblock_re, plural_re, \
-                                                constant_re
+from django.utils.translation.trans_real import (inline_re, block_re,
+    endblock_re, plural_re, constant_re)
 from django.utils.encoding import smart_unicode
 
 
@@ -40,7 +39,7 @@ def extract_django(fileobj, keywords, comment_tags, options):
     singular = []
     plural = []
     lineno = 1
-    for t in Lexer(fileobj.read(), None).tokenize():
+    for t in Lexer(smart_unicode(fileobj.read()), None).tokenize():
         lineno += t.contents.count('\n')
         if intrans:
             if t.token_type == TOKEN_BLOCK:
@@ -100,7 +99,7 @@ def extract_django(fileobj, keywords, comment_tags, options):
                     yield lineno, None, smart_unicode(cmatch.group(1)), []
                 for p in parts[1:]:
                     if p.find(':_(') >= 0:
-                        p1 = p.split(':',1)[1]
+                        p1 = p.split(':', 1)[1]
                         if p1[0] == '_':
                             p1 = p1[1:]
                         if p1[0] == '(':
